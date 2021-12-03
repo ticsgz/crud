@@ -1,14 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    <div>
-        hello
+  </head>
+  <body>
+    <div>hello</div>
+    <div class="test-crud-container">
+      <form id='form' action="/api/vehicles" method="post">
+        <h3>Create a New vehicle</h3>
+<!-- 
+        <p>
+          <code><span class="highlight">POST</span> /api/users</code>
+        </p> -->
+
+        <input id="uvehicle" type="text" name="vehicle" placeholder="vehicle" />
+
+        <input type="submit" value="Submit" />
+      </form>
+
+      <script>
+        const form = document.getElementById("form");
+  
+        form.addEventListener("submit", () => {
+          const brand = document.getElementById("uvehicle").value;
+          exerciseForm.action = `/api/vehicles/`;
+  
+          exerciseForm.submit();
+        });
+      </script>
     </div>
-</body>
+  </body>
 </html>

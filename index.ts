@@ -1,7 +1,9 @@
 const express = require("express");
 var app = express();
-var mongoose = require("mongoose");
-require("dotenv").config()
+const cors = require("cors");
+require("dotenv").config();
+const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
 
 mongoose.connect(
   process.env.MONGO_URI,
@@ -9,14 +11,48 @@ mongoose.connect(
   { useUnifiedTopology: true }
 );
 
+let exerciseSessionSchema = mongoose.Schema({
+  description: { type: String, required: true },
+  duration: { type: Number, required: true },
+  date: String,
+});
+
+let userSchema = mongoose.Schema({
+  username: { type: String, required: true },
+  log: [exerciseSessionSchema],
+});
+
+let Session = mongoose.model("Session", exerciseSessionSchema);
+let User = mongoose.model("User", userSchema);
+
+let vehicleSchema = mongoose.Schema({
+  brand: { type: String, required: true },
+});
+let Vehicle = mongoose.model("Vehicle", vehicleSchema);
+
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/client/views/index.html");
 });
-
+app.get("/api/users", (req, res) => {
+  User.find({}, (error, arrayOfUsers) => {
+    res.json(arrayOfUsers);
+  });
+});
 app.get("/api/hello/", (req, res) => {
   res.json({ hello: "hello worldd" });
 });
-
+app.post("/api/vehicles/", (req, res) => {
+  res.json({ test: "test" });
+  const { vehicle } = req.body;
+  let newVehicle = new Vehicle({ brand: vehicle });
+  newVehicle.save((err, vehicle) => {
+    if (!err) {
+      let responseObject = {};
+      responseObject["brand"] = vehicle.brand;
+      return res.json(responseObject);
+    }
+  });
+});
 const port = process.env.PORT || 3000;
 
 app.listen(port, () => {
